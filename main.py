@@ -25,7 +25,7 @@ def acc_calc(mass_arr: np.ndarray, pos_arr: np.ndarray) -> np.ndarray:  #To calc
                 # Calculate the gravitational acceleration for object i in x, y, and z components
                 acceleration = force_magnitude * r / (mass_arr[i])
                 # Update the x, y, and z components of acceleration in acc_arr
-                acc_arr[i] += acceleration
+                acc_arr[:,i] += acceleration
     
     return acc_arr
 
