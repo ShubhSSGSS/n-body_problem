@@ -3,7 +3,6 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-import vpython as vp
 
 def acc_calc(mass_arr: np.ndarray, pos_arr: np.ndarray) -> np.ndarray:  #To calculate the acceleration of each particle
     assert isinstance(mass_arr, np.ndarray), "mass_arr should be a NumPy array"
@@ -24,12 +23,13 @@ def acc_calc(mass_arr: np.ndarray, pos_arr: np.ndarray) -> np.ndarray:  #To calc
                     continue
                 unit_vec = r/distance
                 # Calculate the gravitational force magnitude
-                G = 6.67e-9  # Universal gravitational constant
+                G = 1  # Universal gravitational constant
                 force_magnitude = (G * mass_arr[i] * mass_arr[j]) / (distance ** 2)
                 # Calculate the gravitational acceleration for object i in x, y, and z components
-                acceleration = force_magnitude * unit_vec / (mass_arr[i])
+                acceleration =  force_magnitude * unit_vec / (mass_arr[i])
                 # Update the x, y, and z components of acceleration in acc_arr
                 acc_arr[:,i] += acceleration
+                acc_arr *= -1
     
     return acc_arr
 
@@ -44,19 +44,23 @@ def update_position_velocity(pos_arr: np.ndarray, vel_arr: np.ndarray, acc_arr: 
     return pos_arr, vel_arr
 
 def numerical_sim(mass_arr,pos_arr,vel_arr):
-    dt=0.07 # each frame is taking approximately this amount of seconds on my pc will change for others
-    t= 10
+    pos_stack = np.copy(pos_array)
+    dt=0.005 # each frame is taking approximately this amount of seconds on my pc will change for others
+    t= 200
     for i in range(int(t/dt)):
-        print(pos_arr)
+        # print(pos_arr)
         x = pos_arr[0]
         y = pos_arr[1]
         z = pos_arr[2]
-        ax =plt.figure().add_subplot(projection='3d')
-        ax.plot(x,y,z,'bo')
-        plt.show()
+        # ax =plt.figure().add_subplot(projection='3d')
+        # ax.plot(x,y,z,'bo')
+        # plt.show()
 
         acc_arr = acc_calc(mass_arr, pos_arr)
         pos_arr,vel_arr = update_position_velocity(pos_arr, vel_arr, acc_arr, dt)
+        pos_stack = np.vstack((pos_stack, pos_arr))
+    return pos_stack
+
 
 #This section creates arrays with the properties of n particles which it reads from a file
 
@@ -86,4 +90,4 @@ for line in fhand:
         vel_index+=1
 
 
-numerical_sim(mass_array, pos_array, vel_array)
+#numerical_sim(mass_array, pos_array, vel_array)
