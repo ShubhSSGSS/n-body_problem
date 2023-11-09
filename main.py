@@ -22,7 +22,7 @@ def acc_calc(mass_arr: np.ndarray, pos_arr: np.ndarray) -> np.ndarray:  #To calc
                 distance = (np.linalg.norm(r)**2 + e**2)**0.5
                 unit_vec = r/distance
                 # Calculate the gravitational force magnitude
-                G = 100  # Universal gravitational constant
+                G = 10  # Universal gravitational constant
                 force_magnitude = (G * mass_arr[i] * mass_arr[j]) / (distance ** 2)
                 # Calculate the gravitational acceleration for object i in x, y, and z components
                 acceleration =  force_magnitude * unit_vec / (mass_arr[i])
