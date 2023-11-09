@@ -9,19 +9,19 @@ def make_grid_3d(xmax,dx):
     # Create vertical lines.
     # Make xy-plane.
     for x in range(-xmax,xmax+dx,dx):
-        grid.append(vp.curve(pos=[vp.vector(x,xmax,0),vp.vector(x,-xmax,0)]))
+        grid.append(vp.curve(pos=[vp.vector(x,xmax,0),vp.vector(x,-xmax,0)],radius=0.05,opacity=0.1,color=vp.color.green))
     for y in range(-xmax,xmax+dx,dx):
-        grid.append(vp.curve(pos=[vp.vector(xmax,y,0),vp.vector(-xmax,y,0)]))
+        grid.append(vp.curve(pos=[vp.vector(xmax,y,0),vp.vector(-xmax,y,0)],radius=0.05,opacity=0.1,color=vp.color.green))
     # Make xz-plane.
     for x in range(-xmax,xmax+dx,dx):
-        grid.append(vp.curve(pos=[vp.vector(x,0,xmax),vp.vector(x,0,-xmax)]))
+        grid.append(vp.curve(pos=[vp.vector(x,0,xmax),vp.vector(x,0,-xmax)],radius=0.05,opacity=0.1,color=vp.color.green))
     for z in range(-xmax,xmax+dx,dx):
-        grid.append(vp.curve(pos=[vp.vector(xmax,0,z),vp.vector(-xmax,0,z)]))
+        grid.append(vp.curve(pos=[vp.vector(xmax,0,z),vp.vector(-xmax,0,z)],radius=0.05,opacity=0.1,color=vp.color.green))
     # Make yz-plane.
     for y in range(-xmax,xmax+dx,dx):
-        grid.append(vp.curve(pos=[vp.vector(0,y,xmax),vp.vector(0,y,-xmax)]))
+        grid.append(vp.curve(pos=[vp.vector(0,y,xmax),vp.vector(0,y,-xmax)],radius=0.05,opacity=0.1,color=vp.color.green))
     for z in range(-xmax,xmax+dx,dx):
-        grid.append(vp.curve(pos=[vp.vector(0,xmax,z),vp.vector(0,-xmax,z)]))
+        grid.append(vp.curve(pos=[vp.vector(0,xmax,z),vp.vector(0,-xmax,z)],radius=0.05,opacity=0.1,color=vp.color.green))
     return
 
 def turn_grid(OnOrOff):
@@ -36,20 +36,22 @@ def turn_grid(OnOrOff):
 
 body_list = []
 
+
+pos_stack = main.numerical_sim(main.mass_array, main.pos_array, main.vel_array)
+
 for i in range(main.num_body):
     x = main.pos_array[0, i]
     y = main.pos_array[1, i]
     z = main.pos_array[2, i]
     body_list.append(vp.sphere(pos=vp.vector(x, y, z), radius=1, color=vp.color.red, make_trail=True,retain=2000))
 
-pos_stack = main.numerical_sim(main.mass_array, main.pos_array, main.vel_array)
 n = len(pos_stack)/3
 i = 0
 
 print(main.np.size(pos_stack))
 
 make_grid_3d(300,20)
-turn_grid('off')
+turn_grid('on')
 
 while i < n:
     vp.rate(100)

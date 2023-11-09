@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 def acc_calc(mass_arr: np.ndarray, pos_arr: np.ndarray) -> np.ndarray:  #To calculate the acceleration of each particle
     assert isinstance(mass_arr, np.ndarray), "mass_arr should be a NumPy array"
@@ -28,7 +28,7 @@ def acc_calc(mass_arr: np.ndarray, pos_arr: np.ndarray) -> np.ndarray:  #To calc
                 acceleration =  force_magnitude * unit_vec / (mass_arr[i])
                 # Update the x, y, and z components of acceleration in acc_arr
                 acc_arr[:,i] += acceleration
-                acc_arr *= -1
+                #acc_arr *= -1
     
     return acc_arr
 
@@ -47,14 +47,6 @@ def numerical_sim(mass_arr,pos_arr,vel_arr):
     dt=0.005 # each frame is taking approximately this amount of seconds on my pc will change for others
     t= 200
     for i in range(int(t/dt)):
-        # print(pos_arr)
-        # x = pos_arr[0]
-        # y = pos_arr[1]
-        # z = pos_arr[2]
-        # ax =plt.figure().add_subplot(projection='3d')
-        # ax.plot(x,y,z,'bo')
-        # plt.show()
-
         acc_arr = acc_calc(mass_arr, pos_arr)
         pos_arr,vel_arr = update_position_velocity(pos_arr, vel_arr, acc_arr, dt)
         pos_stack = np.vstack((pos_stack, pos_arr))
@@ -73,8 +65,8 @@ fhand = open('data.txt')
 pos_index=0
 vel_index=0
 for line in fhand:
-    line=line.rstrip()
-    dummy = line.split(':')
+    #line=line.rstrip()
+    dummy = line.rstrip().split(':')
     data = dummy[1].split(',')
     if 'mass' in dummy[0]:
         for i in range(num_body):
@@ -87,6 +79,3 @@ for line in fhand:
         for i in range(num_body):
             vel_array[vel_index,i]=data[i]
         vel_index+=1
-
-
-# numerical_sim(mass_array, pos_array, vel_array)
