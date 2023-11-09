@@ -18,12 +18,11 @@ def acc_calc(mass_arr: np.ndarray, pos_arr: np.ndarray) -> np.ndarray:  #To calc
                 # Calculate the displacement vector between objects i and j
                 r = pos_arr[:,j] - pos_arr[:,i]
                 # Calculate the distance between objects i and j
-                distance = np.linalg.norm(r)
-                if distance == 0:
-                    continue
+                e = 5 #softening parameter so that the force doesn't shoot to infinity
+                distance = (np.linalg.norm(r)**2 + e**2)**0.5
                 unit_vec = r/distance
                 # Calculate the gravitational force magnitude
-                G = 1  # Universal gravitational constant
+                G = 100  # Universal gravitational constant
                 force_magnitude = (G * mass_arr[i] * mass_arr[j]) / (distance ** 2)
                 # Calculate the gravitational acceleration for object i in x, y, and z components
                 acceleration =  force_magnitude * unit_vec / (mass_arr[i])
@@ -49,9 +48,9 @@ def numerical_sim(mass_arr,pos_arr,vel_arr):
     t= 200
     for i in range(int(t/dt)):
         # print(pos_arr)
-        x = pos_arr[0]
-        y = pos_arr[1]
-        z = pos_arr[2]
+        # x = pos_arr[0]
+        # y = pos_arr[1]
+        # z = pos_arr[2]
         # ax =plt.figure().add_subplot(projection='3d')
         # ax.plot(x,y,z,'bo')
         # plt.show()
@@ -90,4 +89,4 @@ for line in fhand:
         vel_index+=1
 
 
-#numerical_sim(mass_array, pos_array, vel_array)
+# numerical_sim(mass_array, pos_array, vel_array)
