@@ -18,7 +18,7 @@ def acc_calc(mass_arr: np.ndarray, pos_arr: np.ndarray) -> np.ndarray:  #To calc
                 # Calculate the displacement vector between objects i and j
                 r = pos_arr[:,j] - pos_arr[:,i]
                 # Calculate the distance between objects i and j
-                e = 5 #softening parameter so that the force doesn't shoot to infinity
+                e = 2 #softening parameter so that the force doesn't shoot to infinity
                 distance = (np.linalg.norm(r)**2 + e**2)**0.5
                 unit_vec = r/distance
                 # Calculate the gravitational force magnitude
@@ -42,16 +42,49 @@ def update_position_velocity(pos_arr: np.ndarray, vel_arr: np.ndarray, acc_arr: 
 
     return pos_arr, vel_arr
 
+def Energy_calc(mass_arr, pos_arr, vel_arr):
+    #Calculating Potential Energy
+    n = mass_arr.shape[0]
+    e=2 #softening parameter
+    G=10 #Universal Gravitational constant
+    
+    KE = 0.5 * np.sum(mass_arr*np.linalg.norm(vel_arr, axis=0)**2)
+    PE = 0.0
+    for i in range(n):
+        for j in range(n):
+            if i!=j:
+                r = pos_arr[:, j] - pos_arr[:, i]
+                distance = (np.linalg.norm(r)**2 + e**2)**0.5
+                PE += G * mass_arr[i] * mass_arr[j] / (distance)
+    Total_E = KE+PE
+    return KE, PE, Total_E
+    
+
 def numerical_sim(mass_arr,pos_arr,vel_arr):
     pos_stack = np.copy(pos_array)
+    v_sqd_arr = np.zeros_like(mass_arr) # squared magnitude of velocity
+    #vel_stack = np.copy(vel_array)
+    for j in range(len(mass_arr)):
+        v_sqd_arr[j] = sum((vel_arr**2)[:,j])
+
+    v_sqd_stack = np.copy(v_sqd_arr)
+
     dt=0.005 # each frame is taking approximately this amount of seconds on my pc will change for others
     t= 200
+    Energy_arr = np.empty((3,int(t/dt)))
     for i in range(int(t/dt)):
         acc_arr = acc_calc(mass_arr, pos_arr)
         pos_arr,vel_arr = update_position_velocity(pos_arr, vel_arr, acc_arr, dt)
-        pos_stack = np.vstack((pos_stack, pos_arr))
-    return pos_stack
+        
+        Energy_arr[0,i],Energy_arr[1,i],Energy_arr[2,i] = Energy_calc(mass_arr, pos_arr, vel_arr)
+        
+        for j in range(len(mass_arr)):
+            v_sqd_arr[j] = sum((vel_arr ** 2) [:, j])
 
+        v_sqd_stack = np.vstack((v_sqd_stack, v_sqd_arr))
+        pos_stack = np.vstack((pos_stack, pos_arr))
+
+    return pos_stack, v_sqd_stack, Energy_arr
 
 #This section creates arrays with the properties of n particles which it reads from a file
 
