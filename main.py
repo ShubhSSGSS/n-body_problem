@@ -51,11 +51,10 @@ def Energy_calc(mass_arr, pos_arr, vel_arr):
     KE = 0.5 * np.sum(mass_arr*np.linalg.norm(vel_arr, axis=0)**2)
     PE = 0.0
     for i in range(n):
-        for j in range(n):
-            if i!=j:
-                r = pos_arr[:, j] - pos_arr[:, i]
-                distance = (np.linalg.norm(r)**2 + e**2)**0.5
-                PE += G * mass_arr[i] * mass_arr[j] / (distance)
+        for j in range(i+1,n):
+            r = pos_arr[:, j] - pos_arr[:, i]
+            distance = (np.linalg.norm(r)**2 + e**2)**0.5
+            PE -= G * mass_arr[i] * mass_arr[j] / (distance)
     Total_E = KE+PE
     return KE, PE, Total_E
     

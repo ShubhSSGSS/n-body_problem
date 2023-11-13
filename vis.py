@@ -94,6 +94,8 @@ for j in range(len(v_sqd_stack)):
 
 graph = vp.graph(scroll=True, fast=False, xmin=0, xmax=10) #shd try without scroll
 f1 = vp.gcurve(color=vp.color.cyan)
+f2 = vp.gcurve(color=vp.color.blue)
+f3 = vp.gcurve(color=vp.color.black)
 
 n = len(pos_stack)/3
 i = 0
@@ -114,8 +116,10 @@ while i < n:
 
         body_list[j].pos = vp.vector(x, y, z)
         body_list[j].trail_color = vp.vector(R,G,B)
-
-        f1.plot(t,KE_arr[i,0])
+        
+        f1.plot(t, Energy_arr[0, i])
+        f2.plot(t, Energy_arr[1, i])
+        f3.plot(t,Energy_arr[2,i])
 
     i += 1
     t += dt
