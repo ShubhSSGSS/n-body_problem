@@ -81,7 +81,7 @@ for i in range(main.num_body):
     z = main.pos_array[2, i]
     body_list.append(vp.sphere(pos=vp.vector(x, y, z), radius=1, color=vp.color.red, make_trail=True,retain=100))
 
-vp.sphere(pos=vp.vector(0,0,0),texture='BG_images/beautiful-shining-stars-night-sky.jpg', radius=1000)
+vp.sphere(pos=vp.vector(0,0,0),texture='BG_images/xx', radius=1000)
 
 print(main.np.size(pos_stack))
 
@@ -101,7 +101,7 @@ f3 = vp.gcurve(color=vp.color.black)
 n = len(pos_stack)/3
 i = 0
 t=0
-dt=0.005
+dt=0.003
 
 COM = main.COM
 vp.scene.camera.pos = vp.vector(COM[0],COM[1],COM[2])
