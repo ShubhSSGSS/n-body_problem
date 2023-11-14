@@ -18,7 +18,7 @@ def acc_calc(mass_arr: np.ndarray, pos_arr: np.ndarray) -> np.ndarray:  #To calc
                 # Calculate the displacement vector between objects i and j
                 r = pos_arr[:,j] - pos_arr[:,i]
                 # Calculate the distance between objects i and j
-                e = 2 #softening parameter so that the force doesn't shoot to infinity
+                e = 20 #softening parameter so that the force doesn't shoot to infinity
                 distance = (np.linalg.norm(r)**2 + e**2)**0.5
                 unit_vec = r/distance
                 # Calculate the gravitational force magnitude
@@ -45,7 +45,7 @@ def update_position_velocity(pos_arr: np.ndarray, vel_arr: np.ndarray, acc_arr: 
 def Energy_calc(mass_arr, pos_arr, vel_arr):
     #Calculating Potential Energy
     n = mass_arr.shape[0]
-    e=2 #softening parameter
+    e=20 #softening parameter
     G=10 #Universal Gravitational constant
     
     KE = 0.5 * np.sum(mass_arr*np.linalg.norm(vel_arr, axis=0)**2)
@@ -77,7 +77,7 @@ def numerical_sim(mass_arr,pos_arr,vel_arr):
     v_sqd_stack = np.copy(v_sqd_arr)
 
     dt=0.003 # each frame is taking approximately this amount of seconds on my pc will change for others
-    t= 100
+    t= 50
     Energy_arr = np.empty((3,int(t/dt)))
     for i in range(int(t/dt)):
         acc_arr = acc_calc(mass_arr, pos_arr)
@@ -100,7 +100,7 @@ mass_array = np.empty(num_body)
 pos_array = np.empty((3,num_body))
 vel_array = np.empty((3,num_body))
 
-fhand = open('data.txt')
+fhand = open('param1.txt')
 
 pos_index=0
 vel_index=0

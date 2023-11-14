@@ -79,7 +79,8 @@ for i in range(main.num_body):
     x = main.pos_array[0, i]
     y = main.pos_array[1, i]
     z = main.pos_array[2, i]
-    body_list.append(vp.sphere(pos=vp.vector(x, y, z), radius=1, color=vp.color.red, make_trail=True,retain=100))
+    body_list.append(vp.sphere(pos=vp.vector(x, y, z), radius=1, color=vp.color.red, make_trail=True,
+                               retain=10000, trail_type="points", trail_radius=0.70))
 
 vp.sphere(pos=vp.vector(0,0,0),texture='BG_images/xx', radius=1000)
 
@@ -92,6 +93,7 @@ KE_arr= main.np.zeros((len(v_sqd_stack),1))
 
 for j in range(len(v_sqd_stack)):
     KE_arr[j]=sum( 0.5 * (main.mass_array) * (v_sqd_stack[j]) )
+
 
 graph = vp.graph(scroll=True, fast=False, xmin=0, xmax=10) #shd try without scroll
 f1 = vp.gcurve(color=vp.color.cyan)
@@ -107,8 +109,6 @@ COM = main.COM
 vp.scene.camera.pos = vp.vector(COM[0],COM[1],COM[2])
 
 while i < n:
-    if i ==0:
-        time.sleep(3)
     vp.rate(100)
     for j in range(main.num_body):
 
@@ -123,9 +123,9 @@ while i < n:
         body_list[j].pos = vp.vector(x, y, z)
         body_list[j].trail_color = vp.vector(R,G,B)
         
-        f1.plot(t, Energy_arr[0, i])
-        f2.plot(t, Energy_arr[1, i])
-        f3.plot(t,Energy_arr[2,i])
+    f1.plot(t, Energy_arr[0, i])
+    f2.plot(t, Energy_arr[1, i])
+    f3.plot(t, Energy_arr[2, i])
 
     i += 1
     t += dt
