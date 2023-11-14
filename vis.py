@@ -1,5 +1,6 @@
 import vpython as vp
 import main
+import time
 
 def thermal_color_map(v_sqd_stack,mode='local',scale='r2b'):
     colour_stack = main.np.zeros_like(pos_stack)
@@ -106,6 +107,8 @@ COM = main.COM
 vp.scene.camera.pos = vp.vector(COM[0],COM[1],COM[2])
 
 while i < n:
+    if i ==0:
+        time.sleep(3)
     vp.rate(100)
     for j in range(main.num_body):
 
