@@ -57,6 +57,14 @@ def Energy_calc(mass_arr, pos_arr, vel_arr):
             PE -= G * mass_arr[i] * mass_arr[j] / (distance)
     Total_E = KE+PE
     return KE, PE, Total_E
+
+def COM_calc(mass_arr, pos_arr):
+    COM = np.zeros(3)
+    total_mass = np.sum(mass_arr)
+    for i in range(3):
+        COM[i] = np.sum(mass_arr*pos_arr[i])/total_mass
+    
+    return COM
     
 
 def numerical_sim(mass_arr,pos_arr,vel_arr):
@@ -111,3 +119,5 @@ for line in fhand:
         for i in range(num_body):
             vel_array[vel_index,i]=data[i]
         vel_index+=1
+
+COM = COM_calc(mass_array, pos_array)
