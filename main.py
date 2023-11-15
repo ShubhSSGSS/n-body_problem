@@ -80,16 +80,18 @@ def numerical_sim(mass_arr,pos_arr,vel_arr):
     t= 50
     Energy_arr = np.empty((3,int(t/dt)))
     for i in range(int(t/dt)):
+        acc_arr = acc_calc(mass_arr, pos_arr)
+        pos_arr,vel_arr = update_position_velocity(pos_arr, vel_arr, acc_arr, dt)
+        
+        Energy_arr[0,i],Energy_arr[1,i],Energy_arr[2,i] = Energy_calc(mass_arr, pos_arr, vel_arr)
+        
         for j in range(len(mass_arr)):
             v_sqd_arr[j] = sum((vel_arr ** 2) [:, j])
 
         v_sqd_stack = np.vstack((v_sqd_stack, v_sqd_arr))
         pos_stack = np.vstack((pos_stack, pos_arr))
-        
-        acc_arr = acc_calc(mass_arr, pos_arr)
-        pos_arr,vel_arr = update_position_velocity(pos_arr, vel_arr, acc_arr, dt)
-        
-        Energy_arr[0,i],Energy_arr[1,i],Energy_arr[2,i] = Energy_calc(mass_arr, pos_arr, vel_arr)
+
+    return pos_stack, v_sqd_stack, Energy_arr
         
         
 

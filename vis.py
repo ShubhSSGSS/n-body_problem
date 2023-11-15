@@ -72,13 +72,13 @@ def turn_grid(OnOrOff):
 
 #This part of code creates a drop down to selct the scenario
 def on_confirm():
+    global pos_stack, v_sqd_stack, Energy_arr, COM
     selected_value = selected_option.get()
     root.destroy()
-    global pos_stack, v_sqd_stack, Energy_arr, COM
-    pos_stack = main.np.loadtxt(selected_value+'_pos_out.csv')
-    v_sqd_stack = main.np.loadtxt(selected_value+'_vsqd_out.csv')
-    Energy_arr = main.np.loadtxt(selected_value+'_energy_out.csv')
-    COM = main.np.loadtxt(selected_value+'_com_out.csv')
+    pos_stack = main.np.loadtxt('Pos_outputs/'+selected_value+'__pos_out.csv')
+    v_sqd_stack = main.np.loadtxt('Pos_outputs/'+selected_value+'__vsqd_out.csv')
+    Energy_arr = main.np.loadtxt('Pos_outputs/'+selected_value+'__energy_out.csv')
+    COM = main.np.loadtxt('Pos_outputs/'+selected_value+'__com_out.csv')
     
 
 # Create the main application window
@@ -130,7 +130,6 @@ i = 1
 t=0
 dt=0.003
 
-COM = main.COM
 vp.scene.camera.pos = vp.vector(COM[0],COM[1],COM[2])
 
 while i < n:
