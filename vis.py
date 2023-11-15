@@ -88,7 +88,7 @@ root.geometry("400x300")
 # Create a StringVar to hold the selected option
 selected_option = tk.StringVar()
 # Create the dropdown menu
-dropdown = tk.OptionMenu(root, selected_option, "param1", "param2")
+dropdown = tk.OptionMenu(root, selected_option, "param1", "param2", "jupiter")
 dropdown.pack()
 # Confirm button
 confirm_button = tk.Button(root, text="Confirm", command=on_confirm)
@@ -110,9 +110,14 @@ for i in range(num_body):
     y = pos_stack[1, i]
     z = pos_stack[2, i]
     body_list.append(vp.sphere(pos=vp.vector(x, y, z), radius=1, color=vp.color.red, make_trail=True,
-                               retain=10000, trail_type="points", trail_radius=0.70))
+                               retain=10000, trail_type="points", trail_radius=0.30))
 
-vp.sphere(pos=vp.vector(0,0,0),texture='BG_images/xx', radius=1000)
+# vp.sphere(pos=vp.vector(0,0,0),texture='BG_images/xx', radius=1000)
+
+# body_list[4].color=vp.color.yellow
+# body_list[4].radius=30
+# body_list[4].emissive=True
+# body_list[4].shininess=0.2
 
 print(main.np.size(pos_stack))
 
@@ -133,7 +138,7 @@ dt=0.003
 vp.scene.camera.pos = vp.vector(COM[0],COM[1],COM[2])
 
 while i < n:
-    vp.rate(100)
+    vp.rate(150)
     for j in range(num_body):
 
         R = colour_stack[0 + (3 * i), j]

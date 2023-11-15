@@ -77,7 +77,7 @@ def numerical_sim(mass_arr,pos_arr,vel_arr):
     v_sqd_stack = np.copy(v_sqd_arr)
 
     dt=0.003 # each frame is taking approximately this amount of seconds on my pc will change for others
-    t= 50
+    t= 100
     Energy_arr = np.empty((3,int(t/dt)))
     for i in range(int(t/dt)):
         acc_arr = acc_calc(mass_arr, pos_arr)
