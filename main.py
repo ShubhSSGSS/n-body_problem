@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-#import matplotlib.pyplot as plt
+from tkinter.filedialog import askopenfilename
 
 def acc_calc(mass_arr: np.ndarray, pos_arr: np.ndarray) -> np.ndarray:  #To calculate the acceleration of each particle
     assert isinstance(mass_arr, np.ndarray), "mass_arr should be a NumPy array"
@@ -80,44 +80,62 @@ def numerical_sim(mass_arr,pos_arr,vel_arr):
     t= 50
     Energy_arr = np.empty((3,int(t/dt)))
     for i in range(int(t/dt)):
-        acc_arr = acc_calc(mass_arr, pos_arr)
-        pos_arr,vel_arr = update_position_velocity(pos_arr, vel_arr, acc_arr, dt)
-        
-        Energy_arr[0,i],Energy_arr[1,i],Energy_arr[2,i] = Energy_calc(mass_arr, pos_arr, vel_arr)
-        
         for j in range(len(mass_arr)):
             v_sqd_arr[j] = sum((vel_arr ** 2) [:, j])
 
         v_sqd_stack = np.vstack((v_sqd_stack, v_sqd_arr))
         pos_stack = np.vstack((pos_stack, pos_arr))
+        
+        acc_arr = acc_calc(mass_arr, pos_arr)
+        pos_arr,vel_arr = update_position_velocity(pos_arr, vel_arr, acc_arr, dt)
+        
+        Energy_arr[0,i],Energy_arr[1,i],Energy_arr[2,i] = Energy_calc(mass_arr, pos_arr, vel_arr)
+        
+        
 
     return pos_stack, v_sqd_stack, Energy_arr
 
 #This section creates arrays with the properties of n particles which it reads from a file
-
-num_body = int(input("Enter the number of particles: "))
-mass_array = np.empty(num_body)        
-pos_array = np.empty((3,num_body))
-vel_array = np.empty((3,num_body))
-
-fhand = open('param1.txt')
-
-pos_index=0
-vel_index=0
-for line in fhand:
-    #line=line.rstrip()
-    dummy = line.rstrip().split(':')
-    data = dummy[1].split(',')
-    if 'mass' in dummy[0]:
-        for i in range(num_body):
-            mass_array[i] = data[i]
-    elif 'position' in dummy[0]:
-        for i in range(num_body):
-            pos_array[pos_index,i]=data[i]
-        pos_index+=1
-    elif 'velocity' in dummy[0]:
-        for i in range(num_body):
-            vel_array[vel_index,i]=data[i]
-        vel_index+=1
-
-COM = COM_calc(mass_array, pos_array)
+if __name__ =="__main__":
+    num_body = int(input("Enter the number of particles: "))
+    filename = askopenfilename(initialdir='Initial_parameters')
+    
+    mass_array = np.empty(num_body)        
+    pos_array = np.empty((3,num_body))
+    vel_array = np.empty((3,num_body))
+    
+    fhand = open(filename)
+    
+    pos_index=0
+    vel_index=0
+    for line in fhand:
+        #line=line.rstrip()
+        dummy = line.rstrip().split(':')
+        data = dummy[1].split(',')
+        if 'mass' in dummy[0]:
+            for i in range(num_body):
+                mass_array[i] = data[i]
+        elif 'position' in dummy[0]:
+            for i in range(num_body):
+                pos_array[pos_index,i]=data[i]
+            pos_index+=1
+        elif 'velocity' in dummy[0]:
+            for i in range(num_body):
+                vel_array[vel_index,i]=data[i]
+            vel_index+=1
+    
+    
+    COM = COM_calc(mass_array, pos_array)
+    
+    parts= filename.split('/')
+    out_filename_pos = parts[len(parts)-1].split('.')[0]+'__pos_out.csv'
+    out_filename_vsqd = parts[len(parts)-1].split('.')[0]+'__vsqd_out.csv'
+    out_filename_en = parts[len(parts)-1].split('.')[0]+'__energy_out.csv'
+    out_filename_com = parts[len(parts)-1].split('.')[0]+'__com_out.csv'
+    
+    pos_stack, v_sqd_stack, Energy_arr = numerical_sim(mass_array, pos_array, vel_array)
+    
+    np.savetxt('Pos_outputs/'+out_filename_pos,pos_stack)
+    np.savetxt('Pos_outputs/'+out_filename_vsqd,v_sqd_stack)
+    np.savetxt('Pos_outputs/'+out_filename_en,Energy_arr)
+    np.savetxt('Pos_outputs/'+out_filename_com,COM)
