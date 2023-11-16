@@ -1,0 +1,7 @@
+mass: 550, 500
+x-position: -10, 10
+y-position: 0, 0
+z-position: 0, 0
+x-velocity: 0, 0
+y-velocity: -10, 10, 0, 0, 0
+z-velocity: 1, 0

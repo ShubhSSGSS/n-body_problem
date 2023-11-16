@@ -1,7 +1,7 @@
 import vpython as vp
 import main
 import tkinter as tk
-from tkinter import ttk
+import concurrent.futures
 
 def thermal_color_map(v_sqd_stack,mode='local',scale='r2b'):
     colour_stack = main.np.zeros_like(pos_stack)
@@ -71,14 +71,25 @@ def turn_grid(OnOrOff):
     return
 
 #This part of code creates a drop down to selct the scenario
+
+def load_data(file_path):
+    return main.np.loadtxt(file_path)
+
 def on_confirm():
     global pos_stack, v_sqd_stack, Energy_arr, COM
     selected_value = selected_option.get()
     root.destroy()
-    pos_stack = main.np.loadtxt('Pos_outputs/'+selected_value+'__pos_out.csv')
-    v_sqd_stack = main.np.loadtxt('Pos_outputs/'+selected_value+'__vsqd_out.csv')
-    Energy_arr = main.np.loadtxt('Pos_outputs/'+selected_value+'__energy_out.csv')
-    COM = main.np.loadtxt('Pos_outputs/'+selected_value+'__com_out.csv')
+    file_paths = [
+        'Pos_outputs/' + selected_value + '__pos_out.csv',
+        'Pos_outputs/' + selected_value + '__vsqd_out.csv',
+        'Pos_outputs/' + selected_value + '__energy_out.csv',
+        'Pos_outputs/' + selected_value + '__com_out.csv'
+        
+    ]
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+        data_results = list(executor.map(load_data, file_paths))
+        
+    pos_stack, v_sqd_stack, Energy_arr, COM = data_results
     
 
 # Create the main application window
@@ -88,7 +99,7 @@ root.geometry("400x300")
 # Create a StringVar to hold the selected option
 selected_option = tk.StringVar()
 # Create the dropdown menu
-dropdown = tk.OptionMenu(root, selected_option, "param1", "param2", "jupiter")
+dropdown = tk.OptionMenu(root, selected_option, "solar", "param2", "jupiter", "attractor", "binary")
 dropdown.pack()
 # Confirm button
 confirm_button = tk.Button(root, text="Confirm", command=on_confirm)
@@ -109,8 +120,38 @@ for i in range(num_body):
     x = pos_stack[0, i]
     y = pos_stack[1, i]
     z = pos_stack[2, i]
-    body_list.append(vp.sphere(pos=vp.vector(x, y, z), radius=1, color=vp.color.red, make_trail=True,
-                               retain=10000, trail_type="points", trail_radius=0.30))
+    body_list.append(vp.sphere(pos=vp.vector(x, y, z), radius=2, color=vp.color.red, make_trail=True, retain=10000, trail_radius=0.30))
+    
+
+# for chaos demmostration
+# body_list[0].opacity=0.4
+# body_list[1].opacity=0.4
+# body_list[2].opacity=0.4
+# body_list[3].opacity=0.4
+# body_list[4].opacity=0.4
+# body_list[5].opacity=0.4
+# body_list[6].opacity=0.4
+# body_list[7].opacity=0.4
+# body_list[8].opacity=0.4
+# body_list[0].color=vp.color.yellow
+# body_list[1].color=vp.color.yellow
+# body_list[2].color=vp.color.yellow
+# body_list[3].color=vp.color.red
+# body_list[4].color=vp.color.red
+# body_list[5].color=vp.color.red
+# body_list[6].color=vp.color.blue
+# body_list[7].color=vp.color.blue
+# body_list[8].color=vp.color.blue
+# body_list[0].trail_color=vp.color.yellow
+# body_list[1].trail_color=vp.color.yellow
+# body_list[2].trail_color=vp.color.yellow
+# body_list[3].trail_color=vp.color.red
+# body_list[4].trail_color=vp.color.red
+# body_list[5].trail_color=vp.color.red
+# body_list[6].trail_color=vp.color.blue
+# body_list[7].trail_color=vp.color.blue
+# body_list[8].trail_color=vp.color.blue
+
 
 # vp.sphere(pos=vp.vector(0,0,0),texture='BG_images/xx', radius=1000)
 
@@ -138,7 +179,7 @@ dt=0.003
 vp.scene.camera.pos = vp.vector(COM[0],COM[1],COM[2])
 
 while i < n:
-    vp.rate(150)
+    vp.rate(200)
     for j in range(num_body):
 
         R = colour_stack[0 + (3 * i), j]
@@ -150,7 +191,7 @@ while i < n:
         z = pos_stack[2+(3*i), j]
 
         body_list[j].pos = vp.vector(x, y, z)
-        body_list[j].trail_color = vp.vector(R,G,B)
+        body_list[j].trail_color = vp.vector(R,G,B) #comment this line out before chaos demonstration
         
     f1.plot(t, Energy_arr[0, i])
     f2.plot(t, Energy_arr[1, i])
