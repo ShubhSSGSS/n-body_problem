@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Initial_parameters",
+    "\\Pos_outputs"
   ],
-  "SelectedNode": "\\vis.py",
+  "SelectedNode": "\\main.py",
   "PreviewInSolutionExplorer": false
 }

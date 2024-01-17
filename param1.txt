@@ -1,7 +1,0 @@
-mass: 100, 100, 100, 100, 100000
-x-position: -100, 110, 0, 0, 0
-y-position: 0, 0, 120, -130, 0
-z-position: 0, 0, 0, 0, 0
-x-velocity: 0, 0, -100, 100, 0
-y-velocity: -100, 100, 0, 0, 0
-z-velocity: 0, 0, 0, 0, 0
